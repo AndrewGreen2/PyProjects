@@ -1,10 +1,33 @@
+import pyautogui as pg
+import time
+
+
+board = []
+
+while True:
+    row = list(input('Row: '))
+    ints = []
+    
+    for n in row:
+        ints.append(int(n))
+    board.append(ints)
+    
+    if len(board) == 9:
+        break
+    print('Row ' + str(len(board)) + ' Complete ')
+    
+
+
+    
+
+
 def find_empty_space(puzzle):
     # finds the next row, col on the puzzle which isn't filled
     # returns row, col tuple (None,None) if no empty space exists
     
     for r in range(9):
         for c in range(9):  # range(9) is 0,1,2,3, ... 8
-            if puzzle[r][c] == -1:
+            if puzzle[r][c] == 0:
                 return r, c
             
     return None, None
@@ -59,25 +82,25 @@ def sudoku_solver(puzzle):
                 return True
     
     # # 4: if guess is invalid or does not solve puzzle, backtrack and try again
-        puzzle[row][col] = -1
+        puzzle[row][col] = 0
     
     # # 5: if no numbers work - puzzle is unsolvable
     return False
 
 if __name__ == '__main__':
-    board = [
-        [9, -1, -1,   -1, 8, -1,   -1, -1, -1],
-        [-1, 6, -1,   1, -1, -1,   7, 3, -1],
-        [-1, -1, -1,   -1, -1, -1,   -1, -1, 4],
+    # board = [
+    #     [9, 0, 0,   0, 8, 0,   0, 0, 0],
+    #     [0, 6, 0,   1, 0, 0,   7, 3, 0],
+    #     [0, 0, 0,   0, 0, 0,   0, 0, 4],
 
-        [-1, -1, -1,   4, -1, -1,   -1, -1, 6],
-        [-1, -1, 8,   -1, 1, -1,   5, 4, -1],
-        [-1, 5, -1,   -1, -1, -1,   -1, -1, 2],
+    #     [0, 0, 0,   4, 0, 0,   0, 0, 6],
+    #     [0, 0, 8,   0, 1, 0,   5, 4, 0],
+    #     [0, 5, 0,   0, 0, 0,   0, 0, 2],
 
-        [-1, 7, -1,   3, -1, -1,   1, 5, -1],
-        [-1, -1, 6,   -1, -1, 7,   -1, -1, -1],
-        [-1, -1, -1,   -1, -1, -1,   2, -1, -1]        
-    ]
+    #     [0, 7, 0,   3, 0, 0,   1, 5, 0],
+    #     [0, 0, 6,   0, 0, 7,   0, 0, 0],
+    #     [0, 0, 0,   0, 0, 0,   2, 0, 0]        
+    # ]
     print(sudoku_solver(board))
     print(board)
   
