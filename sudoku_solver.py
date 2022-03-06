@@ -1,3 +1,4 @@
+from turtle import down
 import pyautogui as pg
 import time
 
@@ -16,10 +17,30 @@ while True:
         break
     print('Row ' + str(len(board)) + ' Complete ')
     
+time.sleep(2)
 
-
+def input_answer(solution):
+    final = []
+    for lists in solution:
+        for num in lists:
+            final.append(str(num))
     
+    counter = []
 
+    for num in final:
+        pg.press(num) #pyautogui function for pressing number on keyboard
+        pg.hotkey("right") # press number and key to the right
+        counter.append(num)
+        if len(counter) % 9 == 0: # start new line
+            pg.hotkey("down")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
+            pg.hotkey("left")
 
 def find_empty_space(puzzle):
     # finds the next row, col on the puzzle which isn't filled
@@ -103,4 +124,5 @@ if __name__ == '__main__':
     # ]
     print(sudoku_solver(board))
     print(board)
-  
+    input_answer(board)
+    print('done.')
