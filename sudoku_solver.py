@@ -1,4 +1,3 @@
-from turtle import down
 import pyautogui as pg
 import time
 
