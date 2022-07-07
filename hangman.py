@@ -1,7 +1,10 @@
 import random
 
-words = ["test", "play", "hangman", "tractor"]
-word = words[random.randrange(0,3)]
+with open("words.txt", "r") as f:
+    words = f.read().splitlines()
+f.close
+
+word = words[random.randrange(0,len(words))].lower()
 word_state = []
 wrong_guesses = []
 
@@ -22,7 +25,7 @@ def print_word_state():
     currentState = ""
     for i in word_state:
         currentState = currentState + i
-    print("\n", currentState)
+    return(currentState.capitalize())
     
 def print_hangman(): 
     hangman = "" 
@@ -45,34 +48,49 @@ def print_hangman():
         exit()
     print(hangman)
 
-def checkGuess(guess):
+def validGuess(guess):
+    if guess.isalpha() == False:
+        print("Please guess a letter or word.")
+        return False
+
     for i in wrong_guesses:
         if i == guess:
             print("You have already guessed this letter!")
-            print_word_state()
+            print('\n' + print_word_state())
             return False
     return True
     
 def makeGuess():
-    x = 0 
+    x = 0
     rightGuess = False    
-    print("\nGuess a letter: ")
-    guess = input()
-    if checkGuess(guess):               
+    print("\nGuess a letter or word: ")
+    guess = input().lower()
+    if validGuess(guess):
+        if len(guess) > 1:   
+            if guess == word:
+                print("Congratulations! The correct word was: " + word.capitalize())
+                exit()       
         for letter in word:
             x += 1
-            if letter == guess:            
+            if letter.lower() == guess:            
                 word_state[x-1] = guess 
-                rightGuess = True 
+                rightGuess = True
         if rightGuess:
-            print_word_state()
+            if print_word_state().lower() == word:
+                print("Congratulations! The correct word was: " + word.capitalize())
+                exit()     
+            print('\n' + print_word_state())
             return
-        else:
-            wrong_guesses.append(guess)
-            print("Incorrect Letters: ", wrong_guesses, "\n")
-            print_hangman()
-            print_word_state()
+    wrongGuess(guess)
 
-print_word_state()
-while len(wrong_guesses) < 10:
-    makeGuess()
+def wrongGuess(guess):
+    wrong_guesses.append(guess)
+    print("\n" + "Sorry, that guess was incorrect!" + "\n" + "Incorrect guesses: ", wrong_guesses, "\n")
+    print_hangman()
+    print('\n' + print_word_state())
+
+if __name__ == "__main__":
+    print("Let's play Hangman! Good luck.\n\n")
+    print(print_word_state())
+    while len(wrong_guesses) < 10:
+        makeGuess()
