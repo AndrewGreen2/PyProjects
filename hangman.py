@@ -1,12 +1,11 @@
 import random
 
+
 with open("words.txt", "r") as f:
     words = f.read().splitlines()
 f.close
-
-word = words[random.randrange(0,len(words))].lower()
-word_state = []
-wrong_guesses = []
+    
+#----------------------------------------------------------
 
 gallows1 = "   /----\\=========>\n"
 gallows2 = "   |    |        |\n"
@@ -18,14 +17,39 @@ deadhead = "   (x _ x)  \n"
 body = " /(       )\\ \n"
 legs = "  _/   \\_\n"
 
-for i in range(len(word)):
-    word_state.append("_")
+#----------------------------------------------------------
+
+
+def initiate():
+    print("Let's play Hangman! Good luck.\n\n")
+    global word
+    global word_state
+    global wrong_guesses
+    word = words[random.randrange(0,len(words))].lower()
+    word_state = []
+    wrong_guesses = []
+    hangman = ""
+    for i in range(len(word)):
+        word_state.append("_")
+    print(print_word_state())
 
 def print_word_state():
     currentState = ""
     for i in word_state:
         currentState = currentState + i
     return(currentState.capitalize())
+
+def play_again():
+    answer = input("Would you like to play again? (Y/N): ").lower().strip()    
+    while not(answer == "y" or answer == "yes" or \
+    answer == "n" or answer == "no"):
+        print("Input Y or N.")
+        answer = input("Would you like to play again? (Y/N): ").lower().strip()        
+    if answer[0] == "y":
+        initiate()
+    else:
+        exit()
+
     
 def print_hangman(): 
     hangman = "" 
@@ -45,14 +69,18 @@ def print_hangman():
         print("Game Over!")
         hangman = gallows1 + gallows2 + gallows3[:-1] + deadhead + gallows3[:-1] + body + gallows4[:-1] + legs + gallows5
         print(hangman)
-        exit()
+        play_again()
     print(hangman)
 
 def validGuess(guess):
     if guess.isalpha() == False:
         print("Please guess a letter or word.")
         return False
-
+    for i in word_state:
+        if i == guess:
+            print("You have already guessed this letter!")
+            print('\n' + print_word_state())
+            return False
     for i in wrong_guesses:
         if i == guess:
             print("You have already guessed this letter!")
@@ -65,11 +93,11 @@ def makeGuess():
     rightGuess = False    
     print("\nGuess a letter or word: ")
     guess = input().lower()
-    if validGuess(guess):
+    if validGuess(guess) == True:
         if len(guess) > 1:   
             if guess == word:
                 print("Congratulations! The correct word was: " + word.capitalize())
-                exit()       
+                play_again()       
         for letter in word:
             x += 1
             if letter.lower() == guess:            
@@ -78,10 +106,10 @@ def makeGuess():
         if rightGuess:
             if print_word_state().lower() == word:
                 print("Congratulations! The correct word was: " + word.capitalize())
-                exit()     
+                play_again()     
             print('\n' + print_word_state())
             return
-    wrongGuess(guess)
+        wrongGuess(guess)
 
 def wrongGuess(guess):
     wrong_guesses.append(guess)
@@ -90,7 +118,6 @@ def wrongGuess(guess):
     print('\n' + print_word_state())
 
 if __name__ == "__main__":
-    print("Let's play Hangman! Good luck.\n\n")
-    print(print_word_state())
+    initiate()
     while len(wrong_guesses) < 10:
         makeGuess()
