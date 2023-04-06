@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 import random
-from PyPDF2 import PdfReader
 
 def readWriteRecipeValues():
     file_path = r"C:\Users\andre\Documents\PyProjects\PDFReader\RecipeCSVs"   
@@ -37,13 +36,15 @@ def getRequirements():
     #         break
     #     except:
     #         print("That's not a valid option!")
-    proteinGoal = 110
-    carbGoal = 134
-    fatGoal = 52
-    calGoal = (proteinGoal * 4) + (carbGoal * 4) + (fatGoal * 9)
-    noOfMeals = 3
-    #print('Your calorie goal is approx: '+ str(calGoal))
+    proteinGoal = 65
+    carbGoal = 65
+    fatGoal = 29
+    #calGoal = (proteinGoal * 4) + (carbGoal * 4) + (fatGoal * 9)
+    calGoal = 726
+    noOfMeals = 1
+    print(f'Your calorie goal is approx:  {str(calGoal)} \n')
     return(calGoal, proteinGoal, carbGoal, fatGoal, noOfMeals)
+
 
 def listAcceptableRecipes(recipes, mealCalorieGoal, listStart, listEnd):
     mealOptions = []
@@ -74,18 +75,40 @@ def listAcceptableRecipes(recipes, mealCalorieGoal, listStart, listEnd):
     return(mealOptions)
 
 
-
 def createMealPlan(recipes, calGoal, proteinGoal, carbGoal, fatGoal, noOfMeals):
     meals = []
     while len(meals) != noOfMeals:
         mealCalorieGoal = int(calGoal/noOfMeals)
         meals.append(random.choice(listAcceptableRecipes(recipes, mealCalorieGoal, 0 , len(recipes))))
-    print(meals)
-        
+    return(meals)
+
+def openMeals(meals):
+    totalCals = 0
+    totalPro = 0
+    totalCarb = 0
+    totalFat = 0
+    pdfDict = {
+        "BTB": "BTB-Cookbook",
+        "ELCC": "Elite Low Calorie CookBook",
+        "ABCB":"The AnabolicMD Cookbook"
+    }
+
+    for i, meal in enumerate(meals):
+        totalCals += meal['cals']
+        totalPro += meal['pro']
+        totalCarb += meal['carbs']
+        totalFat += meal['fats']
+        print(f'Meal {i+1} : {pdfDict[meal["pdf"]]} Page: {meal["pgNo"]}')
+    print(f'\n-------Totals-------\nCalories:  {totalCals} \nProtein:  {totalPro} \nCarbs:  {totalCarb} \nFats: {totalFat}\n')
+
+
+
+
 def main():  
     #readWriteRecipeValues()      
     calGoal, proteinGoal, carbGoal, fatGoal, noOfMeals = getRequirements()
-    createMealPlan(readWriteRecipeValues(), calGoal, proteinGoal, carbGoal, fatGoal, noOfMeals)
+    mealPlan = createMealPlan(readWriteRecipeValues(), calGoal, proteinGoal, carbGoal, fatGoal, noOfMeals)
+    openMeals(mealPlan)
     
 
 if __name__ == "__main__":

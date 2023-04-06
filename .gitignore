@@ -2,3 +2,5 @@
 /PDFReader/RecipeCSVs
 /PDFReader/RecipePDFs
 /PDFReader/*.csv
+config.py
+__pycache__/
