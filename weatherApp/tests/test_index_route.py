@@ -1,5 +1,3 @@
-import sys
-sys.path.append('C:/Users/andre/Documents/PyProjects/weatherApp/')
 from main import app
 
 
