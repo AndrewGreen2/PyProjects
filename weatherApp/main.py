@@ -11,7 +11,8 @@ def index():
         city = request.form["usr_city"]
         try:
             temperature = get_temperature(city)
-            return f"<p>The current temperature in {city} is {temperature}°C.</p>"
+            return f"<p>The current temperature in {city} is \
+            {temperature}°C.</p>"
         except KeyError:
             return f"<p>The current temperature in {city} is unknown."
     else:
@@ -19,7 +20,8 @@ def index():
 
 
 def get_temperature(city):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={config.api_key}&units=metric"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid\
+        ={config.api_key}&units=metric"
     response = requests.get(url)
     data = response.json()
     temperature = data["main"]["temp"]
